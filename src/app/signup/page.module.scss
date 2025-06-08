@@ -1,0 +1,30 @@
+@import "../../styles/mixins.scss";
+
+.SignUpPage {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+
+  &_or_text {
+    @include para1;
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  &_link_text {
+    @include para1;
+    font-size: 1.4rem;
+    text-align: center;
+    cursor: pointer;
+    margin: 1rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &_signup_btn {
+    margin-top: 1rem;
+  }
+}

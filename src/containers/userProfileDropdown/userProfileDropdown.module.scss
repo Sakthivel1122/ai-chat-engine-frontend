@@ -1,0 +1,87 @@
+@import "../../styles/mixins.scss";
+@import "../../styles/variables.scss";
+
+$item-border-light: 1px solid rgba(0, 0, 0, 0.1);
+$item-border-dark: 1px solid rgba(255, 255, 255, 0.2);
+
+.UserProfileDropdown {
+  // width: 20rem;
+  width: fit-content;
+  border: $item-border-light;
+  box-shadow: 0 0 5px rgba($color: $primary-color, $alpha: 0.2);
+  border-radius: 0.5rem;
+  z-index: 10;
+  background-color: white;
+
+  //   max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+
+  &.open_dropdown {
+    // max-height: 30rem;
+    opacity: 1;
+  }
+
+  :global(html.dark) & {
+    border: $item-border-dark;
+    background-color: rgb(39, 39, 39);
+    box-sizing: none;
+  }
+
+  .item {
+    &_wrapper {
+      display: flex;
+      align-items: center;
+      //   justify-content: space-between;
+      gap: 1rem;
+      padding: 0.8rem;
+    }
+    &_text {
+      @include para1;
+    }
+    &_icon {
+      font-size: 2rem;
+    }
+  }
+
+  &_section_1,
+  &_section_2,
+  &_section_3 {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.8rem;
+  }
+
+  &_section_1,
+  &_section_2 {
+    border-bottom: $item-border-light;
+    :global(html.dark) & {
+      border-bottom: $item-border-dark;
+    }
+  }
+
+  &_section_2 {
+    .item_wrapper {
+      justify-content: space-between;
+    }
+  }
+
+  &_section_3 {
+    .item {
+      &_wrapper {
+        cursor: pointer !important;
+        &:hover {
+          background-color: $primary-hover-color;
+          :global(html.dark) & {
+            background-color: $dark-primary-hover-color;
+          }
+        }
+      }
+      &_icon,
+      &_text {
+        color: red !important;
+      }
+    }
+  }
+}

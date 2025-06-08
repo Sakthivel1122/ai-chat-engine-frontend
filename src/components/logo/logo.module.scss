@@ -1,0 +1,22 @@
+@import "../../styles/variables.scss";
+
+.Logo {
+  font-size: 2rem;
+  color: white;
+  &_wrapper {
+    height: 4rem;
+    width: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: black;
+  }
+
+  :global(html.dark) & {
+    color: black;
+    &_wrapper {
+        background-color: white;
+    }
+  }
+}

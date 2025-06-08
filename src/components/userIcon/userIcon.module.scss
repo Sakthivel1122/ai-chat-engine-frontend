@@ -1,0 +1,14 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+
+.UserIcon {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+  @include flex-center;
+  background-color: $primary-color;
+  font-size: 2rem;
+  color: white;
+  font-family: $primary-font;
+  cursor: pointer;
+}

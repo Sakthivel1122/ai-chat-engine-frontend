@@ -1,0 +1,36 @@
+@import "../../styles/variables.scss";
+
+.toggle {
+  width: 4.4rem;
+  height: 2.4rem;
+  background-color: #ccc;
+  border-radius: 10rem;
+  display: flex;
+  align-items: center;
+  padding: 0.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  :global(html.dark) & {
+    background-color: #9c9c9c;
+  }
+
+  .thumb {
+    width: 1.8rem; // 16px
+    height: 1.8rem;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.5s ease;
+  }
+
+  &.checked {
+    background-color: $primary-color;
+    :global(html.dark) & {
+      background-color: $primary-color;
+    }
+
+    .thumb {
+      transform: translateX(2rem);
+    }
+  }
+}

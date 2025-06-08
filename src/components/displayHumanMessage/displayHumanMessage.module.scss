@@ -1,0 +1,16 @@
+@import "../../styles/mixins.scss";
+
+.DisplayHumanMessage {
+  @include para1;
+  padding: 1rem 1.6rem;
+  line-height: 3.5rem;
+  border-radius: 0.8rem;
+  align-self: flex-end;
+  max-width: 60rem;
+  height: fit-content;
+  background-color: #e7e7e7;
+
+  :global(html.dark) & {
+    background-color: #363636;
+  }
+}

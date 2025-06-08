@@ -1,0 +1,125 @@
+@import "../../styles/mixins.scss";
+@import "../../styles/variables.scss";
+
+$item-border-light: 1px solid rgba(0, 0, 0, 0.1);
+$item-border-dark: 1px solid rgba(255, 255, 255, 0.1);
+
+.UserSideBar {
+  height: 100vh;
+  width: 28rem;
+  display: flex;
+  flex-direction: column;
+  border-right: $item-border-light;
+  
+  :global(html.dark) & {
+    border-right: $item-border-dark;
+  }
+
+  &_logo_container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding-top: 1.2rem;
+    padding-left: 1rem;
+    padding-bottom: 1.2rem;
+    border-bottom: $item-border-light;
+    :global(html.dark) & {
+      border-bottom: $item-border-dark;
+    }
+  }
+
+  &_app_name_text {
+    @include para1;
+    font-weight: bold;
+    font-size: 2rem;
+  }
+
+  &_custom_logo_wrapper {
+    height: 3.5rem !important;
+    width: 3.5rem !important;
+  }
+
+  &_logo {
+    font-size: 1.6rem !important;
+  }
+
+  &_search_container {
+    padding: 1.6rem 1rem;
+    border-bottom: $item-border-light;
+    :global(html.dark) & {
+      border-bottom: $item-border-dark;
+    }
+  }
+
+  &_title_text {
+    @include para1;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: $light-grey-color;
+
+    :global(html.dark) & {
+      color: $light-grey-color;
+    }
+  }
+
+  &_section_wrapper {
+    // flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  &_chat_scrollable_wrapper {
+    // flex: 1 1 auto;
+    overflow-y: auto;
+    display: flex;
+    // flex-direction: column;
+    // @include custom-scrollbar;
+  }
+
+  &_chat_container {
+    padding: 1rem;
+    padding-right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex-shrink: 0;
+    width: 100%;
+  }
+
+  &_chat_item_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &_chat_item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.3rem 1rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+
+    &:hover {
+      background-color: $active-color;
+    }
+  }
+
+  &_chat_title {
+    @include para1;
+    font-size: 1.4rem;
+  }
+
+  &_chat_add_icon {
+    font-size: 1.4rem;
+  }
+
+  &_chat_sessions_wrapper {
+    // flex: 1 1 auto;
+    overflow-y: auto;
+    // width: 100%;
+    @include custom-scrollbar;
+  }
+}

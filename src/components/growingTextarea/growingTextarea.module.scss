@@ -1,0 +1,21 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+
+.textarea {
+  @include para1;
+  width: 100%;
+  padding: 1rem; // smaller padding
+  font-size: 1.4rem;
+  line-height: 1.4;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  resize: none;
+  transition: height 0.2s ease;
+  box-sizing: border-box;
+  overflow-y: auto;
+  outline: none;
+
+  &:focus {
+    border-color: $primary-color;
+  }
+}

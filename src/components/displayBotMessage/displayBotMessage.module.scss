@@ -1,0 +1,8 @@
+@import "../../styles/mixins.scss";
+
+.DisplayBotMessage {
+  @include para1;
+  line-height: 3.5rem;
+  padding: 1.6rem;
+  border-radius: 0.8rem;
+}

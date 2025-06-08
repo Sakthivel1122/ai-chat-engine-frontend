@@ -1,0 +1,28 @@
+@import "../../styles/mixins.scss";
+@import "../../styles/variables.scss";
+
+.ChatItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.3rem 1rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+
+  &:hover,
+  &.active {
+    background-color: $primary-hover-color;
+
+    :global(html.dark) & {
+      background-color: $dark-primary-hover-color;
+    }
+  }
+
+  &_add_icon {
+    font-size: 1.4rem;
+  }
+  &_label {
+    @include para1;
+    font-size: 1.4rem;
+  }
+}

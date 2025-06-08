@@ -1,0 +1,37 @@
+@import "../../styles/mixins.scss";
+@import "../../styles/variables.scss";
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.label {
+  color: #333;
+  @include para1;
+}
+
+.input {
+  @include para1;
+  padding: 1rem 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.2s;
+  font-size: 1.6rem;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+  }
+
+  :global(html.dark) & {
+    background-color: #333;
+  }
+}
+
+.error_msg {
+  @include para1;
+  font-size: 1.4rem;
+  color: red;
+}

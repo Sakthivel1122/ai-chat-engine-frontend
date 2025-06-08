@@ -1,0 +1,89 @@
+@import "./variables.scss";
+
+@mixin heading1 {
+  font-family: $primary-font;
+  font-size: 3.6rem;
+  font-weight: 700;
+}
+
+@mixin heading2 {
+  font-family: $primary-font;
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+
+@mixin para1 {
+  font-family: $primary-font;
+  font-size: 1.6rem;
+
+  :global(html.dark) & {
+    color: white;
+  }
+}
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin logo {
+  font-family: $primary-font;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+@mixin section-wrapper {
+  height: 100vh;
+  padding-top: 6rem;
+  position: relative;
+}
+
+@mixin section-content {
+  max-width: $content-width;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.6rem;
+  height: 100%;
+}
+
+@mixin custom-scrollbar(
+  $width: 0.8rem,
+  $track-color: #f1f1f1,
+  $thumb-color: #bcb9b9,
+  $thumb-hover-color: #8f8d8d
+) {
+  &::-webkit-scrollbar {
+    width: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $track-color;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $thumb-color;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $thumb-hover-color;
+  }
+
+  :global(html.dark) & {
+    &::-webkit-scrollbar {
+      width: $width;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #4c4c4c;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #6b6b6b;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #949494;
+    }
+  }
+}

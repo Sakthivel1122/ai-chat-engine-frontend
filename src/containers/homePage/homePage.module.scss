@@ -1,0 +1,20 @@
+.HomePage {
+  height: 100vh;
+  max-height: 100vh;
+  // overflow-y: hidden;
+  display: flex;
+
+  &_content_right {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  &_sidebar {
+  }
+
+  &_navbar {
+    position: sticky;
+    top: 0;
+  }
+}
