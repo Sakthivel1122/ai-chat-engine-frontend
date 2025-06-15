@@ -9,7 +9,7 @@ interface DisplayBotMessageProps {
 const DisplayBotMessage: React.FC<DisplayBotMessageProps> = ({ message }) => {
   return (
     <div className={styles.DisplayBotMessage}>
-      <ReactMarkdown >{message}</ReactMarkdown>
+      <ReactMarkdown>{message}</ReactMarkdown>
     </div>
   );
 };

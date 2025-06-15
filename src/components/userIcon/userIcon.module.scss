@@ -2,12 +2,12 @@
 @import "../../styles/mixins.scss";
 
 .UserIcon {
-  height: 4rem;
-  width: 4rem;
+  height: 3.5rem;
+  width: 3.5rem;
   border-radius: 50%;
   @include flex-center;
   background-color: $primary-color;
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: white;
   font-family: $primary-font;
   cursor: pointer;

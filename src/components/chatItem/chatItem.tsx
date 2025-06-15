@@ -9,6 +9,7 @@ interface ChatItemProps {
   icon?: "add" | "chat" | "none";
   onClick: () => void;
   isActive?: boolean;
+  className?: string;
 }
 
 const ChatItem: React.FC<ChatItemProps> = ({
@@ -17,11 +18,13 @@ const ChatItem: React.FC<ChatItemProps> = ({
   icon,
   onClick,
   isActive,
+  className,
 }) => {
   return (
     <div
-      className={`${styles.ChatItem} ${isActive ? styles.active : ""}`}
+      className={`${styles.ChatItem} ${className} ${isActive ? styles.active : ""}`}
       onClick={onClick}
+      title={label}
     >
       {icon === "add" ? (
         <IoMdAddCircleOutline className={styles.ChatItem_add_icon} />

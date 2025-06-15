@@ -2,7 +2,7 @@
 // color
 $primary-color: #9249e7;
 $primary-hover-color: rgba(146, 73, 231, 0.1);
-$dark-primary-hover-color: #404040;
+$dark-primary-hover-color: #3a3a3a;
 $active-color: rgba(146, 73, 231, 0.1);
 $secondary-color: #854fee;
 $light-grey-color: rgb(145, 145, 145);
@@ -17,3 +17,10 @@ $primary-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 // size
 $content-width: 140rem;
  
+$breakpoints: (
+  "xs": 480px,
+  "sm": 600px,
+  "md": 768px,
+  "lg": 992px,
+  "xl": 1200px
+);

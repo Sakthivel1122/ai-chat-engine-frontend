@@ -4,18 +4,31 @@
 .textarea {
   @include para1;
   width: 100%;
-  padding: 1rem; // smaller padding
-  font-size: 1.4rem;
+  padding: 1rem;
+  // border: 1px solid red;
+  font-size: 1.6rem;
   line-height: 1.4;
   border-radius: 0.5rem;
-  border: 1px solid #ccc;
+  // border: 1px solid #ccc;
   resize: none;
-  transition: height 0.2s ease;
+  transition: height 0.1s ease; // Faster transition for smoother feel
   box-sizing: border-box;
-  overflow-y: auto;
   outline: none;
+  border: none;
+  background-color: transparent;
 
-  &:focus {
-    border-color: $primary-color;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  overflow-y: hidden;
+  overflow-x: hidden;
+  
+  word-wrap: break-word;
+  white-space: pre-wrap;
+
+  &::placeholder {
+    color: #999;
+    opacity: 1; // Firefox fix
   }
 }

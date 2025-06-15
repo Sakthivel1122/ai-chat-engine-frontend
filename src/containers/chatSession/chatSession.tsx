@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import styles from "./chatSession.module.scss";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
 import ChatFlow from "../chatFlow/chatFlow";
+import GrowingTextarea from "@/components/growingTextarea/growingTextarea";
+import { FaArrowUp } from "react-icons/fa6";
 
 interface ChatSessionProps {
   chatSessionData?: any;
@@ -11,6 +13,7 @@ interface ChatSessionProps {
   handleSendBtnClick: (promptText: string) => void;
   promptText: string;
   setPromptText: (promptText: string) => void;
+  sendBtnIsLoading?: boolean;
 }
 
 const ChatSession: React.FC<ChatSessionProps> = ({
@@ -20,9 +23,10 @@ const ChatSession: React.FC<ChatSessionProps> = ({
   promptText,
   setPromptText,
   handleSendBtnClick,
+  sendBtnIsLoading,
 }) => {
   const handleBottomInputOncChange = (e: any) => {
-    setPromptText(e.target.value);
+    setPromptText(e);
   };
 
   const handleEnterKey = (e: any) => {
@@ -33,10 +37,12 @@ const ChatSession: React.FC<ChatSessionProps> = ({
 
   useEffect(() => {}, []);
 
+  const isNewChat = !(chatList && chatList?.length > 0);
+
   return (
     <div
       className={`${styles.ChatSession} ${
-        !(chatList && chatList?.length > 0)
+        isNewChat
           ? styles.ChatSession_initial_content
           : ""
       }`}
@@ -48,7 +54,7 @@ const ChatSession: React.FC<ChatSessionProps> = ({
           <p className={styles.ChatSession_chat_details_title}>
             {chatAIProfileData && chatAIProfileData?.name
               ? chatAIProfileData?.name
-              : "Welcome to AI Chat"}
+              : "What's on your mind today?"}
           </p>
           <p className={styles.ChatSession_chat_details_description}>
             Get Startted
@@ -56,21 +62,31 @@ const ChatSession: React.FC<ChatSessionProps> = ({
         </div>
       )}
       <div className={styles.ChatSession_bottom_wrapper}>
-        <div className={styles.ChatSession_bottom_content}>
-          <Input
+        <div className={`${styles.ChatSession_bottom_content} ${isNewChat ? styles.ChatSession_bottom_content_pos_top : ""}`}>
+          <GrowingTextarea
             className={styles.ChatSession_prompt_input_box}
             value={promptText}
             onChange={handleBottomInputOncChange}
             placeholder="Enter prompt here..."
-            onKeyDown={handleEnterKey}
+            onSubmit={() => {
+              if (promptText) {
+                handleSendBtnClick(promptText);
+              }
+            }}
           />
           <Button
             className={styles.ChatSession_send_btn}
-            content="Send"
             onClick={() => {
-              handleSendBtnClick(promptText);
+              if (promptText) {
+                handleSendBtnClick(promptText);
+              }
             }}
-          />
+            disabled={!sendBtnIsLoading ? (promptText ? false : true) : false}
+            isLoading={sendBtnIsLoading}
+            loaderSize={14}
+          >
+            <FaArrowUp size={14}/>
+          </Button>
         </div>
       </div>
     </div>

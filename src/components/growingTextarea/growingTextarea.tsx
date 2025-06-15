@@ -15,7 +15,7 @@ const GrowingTextarea: React.FC<GrowingTextareaProps> = ({
   value,
   onChange,
   placeholder = "Type here...",
-  minHeight = 20,
+  minHeight = 40,
   maxHeight = 200,
   className = "",
   onSubmit,
@@ -26,16 +26,35 @@ const GrowingTextarea: React.FC<GrowingTextareaProps> = ({
     const textarea = textareaRef.current;
     if (!textarea) return;
 
-    console.log("textarea.scrollHeight", textarea.scrollHeight);
-
-    textarea.style.height = "auto"; // reset height
-    const newHeight = Math.min(textarea.scrollHeight, maxHeight);
+    // Store current scroll position to maintain it during resize
+    const scrollTop = textarea.scrollTop;
+    
+    // Reset height to auto to get accurate scrollHeight
+    textarea.style.height = "auto";
+    
+    // Calculate the new height
+    const scrollHeight = textarea.scrollHeight;
+    const newHeight = Math.max(minHeight, Math.min(scrollHeight, maxHeight));
+    
+    // Apply the new height
     textarea.style.height = `${newHeight}px`;
+    
+    // Restore scroll position
+    textarea.scrollTop = scrollTop;
   };
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      resizeTextarea();
+    }, 0);
+    
+    return () => clearTimeout(timer);
+  }, [value, minHeight, maxHeight]);
+
+  // Also resize on mount
+  useEffect(() => {
     resizeTextarea();
-  }, [value]);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e.target.value);
@@ -43,8 +62,8 @@ const GrowingTextarea: React.FC<GrowingTextareaProps> = ({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // prevent newline
-      onSubmit?.(); // call if defined
+      e.preventDefault();
+      onSubmit?.();
       console.log("submit enter");
     }
   };
@@ -60,8 +79,9 @@ const GrowingTextarea: React.FC<GrowingTextareaProps> = ({
       style={{
         minHeight: `${minHeight}px`,
         maxHeight: `${maxHeight}px`,
-        overflowY: "auto",
+        overflowY: maxHeight && textareaRef.current && textareaRef.current.scrollHeight > maxHeight ? "auto" : "hidden",
       }}
+      rows={1} // Start with single row
     />
   );
 };

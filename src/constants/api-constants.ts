@@ -7,6 +7,7 @@ export const API_CONSTANTS = {
   REFRESH_TOKEN: `${BaseUrl}/authentication/api/v1/refresh-token`,
   TOKEN: `${BaseUrl}/token`,
   GET_CHAT_SESSION: `${BaseUrl}/ai-engine/api/v1/user/get-chat-session`,
+  GET_CHAT_SESSION_DATA: `${BaseUrl}/ai-engine/api/v1/user/get-chat-session-data`,
   AI_PROFILE: `${BaseUrl}/ai-engine/api/v1/user/ai-profile`,
   SEND_MESSAGE: `${BaseUrl}/ai-engine/api/v1/user/send-message`,
   CHAT_HISTORY: `${BaseUrl}/ai-engine/api/v1/user/chat-history`,

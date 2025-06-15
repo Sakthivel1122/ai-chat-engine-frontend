@@ -34,3 +34,11 @@
     font-size: 1.4rem !important;
   }
 }
+
+@include respond-to("sm") {
+  .AuthFormLayout {
+    &_form_wrapper {
+      box-shadow: none;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./homePage.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
@@ -15,22 +15,38 @@ import {
 } from "@/app/api/chat/chat";
 import NavBar from "@/containers/navBar/navBar";
 import ChatSession from "../chatSession/chatSession";
+import { streamChatWithFetch } from "@/utils/sharedFunctions";
+import Loader from "@/components/loader/loader";
+import { BREAK_POINTS } from "@/constants/app-constants";
 
 interface HomePageProps {}
 let count = 0;
 
+type TgetChatSessionListPayload = {
+  page_no: number,
+  page_size: number
+}
 const HomePage: React.FC<HomePageProps> = () => {
   const userName = useSelector((state: RootState) => state.user.userName);
   const dispatch = useDispatch();
 
   const [aiProfileList, setAiProfileList] = useState([]);
   const [chatSessionList, setChatSessionList] = useState([]);
+  const [streamedText, setStreamedText] = useState("");
 
   // chat
   const [chatSessionData, setChatSessionData] = useState<any>({});
   const [chatAIProfileData, setChatAIProfileData] = useState<any>({});
-  const [chatList, setChatList] = useState([]);
+  const [chatList, setChatList] = useState<any>([]);
   const [promptText, setPromptText] = useState("");
+  const [chatSessionListPageSize, setChatSessionListPageSize] = useState<any>(15);
+  const [sendBtnIsLoading, setSendBtnIsLoading] = useState<boolean>(false);
+  const [chatSessionScrollLoader, setChatSessionScrollLoader] = useState<boolean>(false);
+  const [innerWidth, setInnerWidth] = useState<number>();
+  const [showSideBar, setShowSideBar] = useState<boolean>(false);
+
+  const chatSessionTotalPageRef = useRef(0);
+  const chatSessionCurrectPageRef = useRef(1);
 
   const handleClick = () => {
     dispatch(setUserName(`user ${count}`));
@@ -40,18 +56,21 @@ const HomePage: React.FC<HomePageProps> = () => {
   const handleChatSessiOnClick = (data: any) => {
     setChatSessionData(data);
     updateChatList(data?.session_id);
+    setShowSideBar(false);
   };
 
   const handleNewChatOnClick = () => {
     setChatSessionData({});
     setChatAIProfileData({});
     setChatList([]);
+    setShowSideBar(false);
   };
 
   const handleAIProfileOnClick = (data: any) => {
     setChatAIProfileData(data);
     setChatSessionData({});
     setChatList([]);
+    setShowSideBar(false);
   };
 
   const updateChatList = (sessionId: string) => {
@@ -68,7 +87,9 @@ const HomePage: React.FC<HomePageProps> = () => {
     });
   };
 
-  const handleSendBtnClick = (promptText: string) => {
+  const handleSendBtnClick = async (promptText: string) => {
+    setSendBtnIsLoading(true);
+
     let payload: any = {
       message: promptText,
     };
@@ -79,14 +100,47 @@ const HomePage: React.FC<HomePageProps> = () => {
       payload.ai_profile_id = chatAIProfileData?.id;
     }
 
-    sendMessageApi(payload, (res) => {
-      if (res.response.status === 200) {
-        const sessionId = res?.content?.chat_session_id;
-        updateChatList(sessionId);
+    payload.chat_type = "stream";
+
+    let once = true;
+
+    try {
+      await streamChatWithFetch(payload, (chunk) => {
+        setStreamedText((prev) => prev + chunk);
+
+        let tempArr = chatList;
+
+        if (once) {
+          tempArr.push({
+            sender: "bot",
+            message: "",
+          });
+          once = false;
+        }
+        const len = tempArr.length - 1;
+        let newMsg = tempArr[len].message + chunk;
+        tempArr[len].message = newMsg;
+        setChatList(tempArr);
+      }, (meta) => {
+        setSendBtnIsLoading(false);
         setPromptText("");
+        const sessionId = meta?.chat_session_id;
+
+        const tempArr = chatList;
+        tempArr.push({
+          sender: "human",
+          message: meta?.user_message
+        });
+        setChatList(tempArr);
+
+        // updateChatList(sessionId);
         if (!payload?.chat_session_id) {
-          updateChatSessionList();
-          const params = `/${sessionId}`;
+          const payload = {
+            page_no: 1,
+            page_size: chatSessionListPageSize
+          }
+          updateChatSessionList(payload, true);
+          const params = `?session_id=${sessionId}`;
           getChatSessionDataApi(params, (res) => {
             if (res.response.status === 200) {
               const sessionData = res?.content;
@@ -94,10 +148,76 @@ const HomePage: React.FC<HomePageProps> = () => {
             }
           });
         }
+      }).catch((error) => {
+        setSendBtnIsLoading(false);
+      })
+    } catch (err) {
+      console.error("Streaming failed:", err);
+    }
+
+    // sendMessageApi(payload, (res) => {
+    //   if (res.response.status === 200) {
+    //     const sessionId = res?.content?.chat_session_id;
+    //     updateChatList(sessionId);
+    //     setPromptText("");
+    //     if (!payload?.chat_session_id) {
+    //       updateChatSessionList();
+    //       const params = `?${sessionId}`;
+    //       getChatSessionDataApi(params, (res) => {
+    //         if (res.response.status === 200) {
+    //           const sessionData = res?.content;
+    //           setChatSessionData(sessionData);
+    //         }
+    //       });
+    //     }
+    //   } else {
+    //   }
+    // });
+  };
+
+  const updateChatSessionList = (payload: TgetChatSessionListPayload, reset: boolean) => {
+    getChatSessionListApi(payload, (res) => {
+      if (res.response.status === 200) {
+        if (res?.content?.data) {
+          if (reset) {
+            setChatSessionList(res?.content?.data);
+          } else {
+            setChatSessionList((prev):any => {
+              return [...prev, ...res?.content?.data]
+            });
+          }
+        }
+        chatSessionCurrectPageRef.current = payload?.page_no;
+        chatSessionTotalPageRef.current = res?.content?.total_pages;
+        setChatSessionScrollLoader(false);
       } else {
+        setChatSessionScrollLoader(false);
       }
     });
   };
+
+  const handleScrollEnd = () => {
+    if (chatSessionCurrectPageRef.current < chatSessionTotalPageRef.current) {
+      setChatSessionScrollLoader(true);
+      const payload = {
+        page_no: chatSessionCurrectPageRef.current + 1,
+        page_size: chatSessionListPageSize,
+      }
+      updateChatSessionList(payload, false);
+    } else {
+      setChatSessionScrollLoader(false);
+    }
+  }
+
+  const handleToggleSideBar = () => {
+    setShowSideBar(!showSideBar);
+  }
+
+  const handleOutsideClick = (e:any) => {
+    if (e.target.id === "SideBarWrapper") {
+      setShowSideBar(false);
+    }
+  }
 
   useEffect(() => {
     getAIProfileListApi((res) => {
@@ -106,31 +226,72 @@ const HomePage: React.FC<HomePageProps> = () => {
       } else {
       }
     });
-    updateChatSessionList();
+    const payload = {
+      page_no: 1,
+      page_size: chatSessionListPageSize
+    }
+    updateChatSessionList(payload, true);
   }, []);
 
-  const updateChatSessionList = () => {
-    getChatSessionListApi((res) => {
-      if (res.response.status === 200) {
-        setChatSessionList(res?.content);
-      } else {
-      }
-    });
-  };
+  useEffect(() => {
+    setInnerWidth(window.innerWidth);
+    const handleUpdateWidth = () => {
+      setInnerWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleUpdateWidth);
+    return () => {
+      window.removeEventListener("resize", handleUpdateWidth);
+    };
+  }, []);
 
   return (
     <div className={styles.HomePage}>
-      <UserSideBar
-        aiProfileList={aiProfileList}
-        chatSessionList={chatSessionList}
-        className={styles.HomePage_sidebar}
-        chatSessionId={chatSessionData?.session_id}
-        handleNewChatOnClick={handleNewChatOnClick}
-        handleChatSessiOnClick={handleChatSessiOnClick}
-        handleAIProfileOnClick={handleAIProfileOnClick}
-      />
+      {/* <div style={{display: "flex", flexDirection: "column"}}>
+      <p>{streamedText}</p>
+      <Button content="Send" onClick={() => {
+        handleSendBtnClick("Hello");
+      }}/>
+      </div> */}
+      {/* <Loader /> */}
+
+      {innerWidth && ((innerWidth && innerWidth <= BREAK_POINTS.LARGE)
+        ? <>
+            <div
+              className={`${styles.HomePage_sidebar_wrapper} ${showSideBar ? styles.open : ""}`}
+              id="SideBarWrapper" 
+              onClick={handleOutsideClick}
+            />
+            <UserSideBar
+              aiProfileList={aiProfileList}
+              chatSessionList={chatSessionList}
+              className={`${styles.HomePage_sidebar} ${showSideBar ? styles.open : ""}`}
+              chatSessionId={chatSessionData?.session_id}
+              handleNewChatOnClick={handleNewChatOnClick}
+              handleChatSessiOnClick={handleChatSessiOnClick}
+              handleAIProfileOnClick={handleAIProfileOnClick}
+              handleScrollEnd={handleScrollEnd}
+              showChatSessionScrollLoader={chatSessionScrollLoader}
+              handleCloseBtnClick={handleToggleSideBar}
+            />
+          </>
+        : <UserSideBar
+            aiProfileList={aiProfileList}
+            chatSessionList={chatSessionList}
+            className={styles.HomePage_sidebar}
+            chatSessionId={chatSessionData?.session_id}
+            handleNewChatOnClick={handleNewChatOnClick}
+            handleChatSessiOnClick={handleChatSessiOnClick}
+            handleAIProfileOnClick={handleAIProfileOnClick}
+            handleScrollEnd={handleScrollEnd}
+            showChatSessionScrollLoader={chatSessionScrollLoader}
+            handleCloseBtnClick={handleToggleSideBar}
+          />)}
+
       <div className={styles.HomePage_content_right}>
-        <NavBar className={styles.HomePage_navbar} />
+        <NavBar
+          className={styles.HomePage_navbar}
+          handleBurgerIconOnClick={handleToggleSideBar}
+        />
         <ChatSession
           chatSessionData={chatSessionData}
           chatAIProfileData={chatAIProfileData}
@@ -138,6 +299,7 @@ const HomePage: React.FC<HomePageProps> = () => {
           handleSendBtnClick={handleSendBtnClick}
           promptText={promptText}
           setPromptText={setPromptText}
+          sendBtnIsLoading={sendBtnIsLoading}
         />
       </div>
     </div>

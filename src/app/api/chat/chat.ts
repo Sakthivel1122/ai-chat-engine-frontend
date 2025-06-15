@@ -2,9 +2,10 @@ import { API_CONSTANTS, API_METHODS } from "@/constants/api-constants";
 import { fetchCall } from "../ajax";
 
 export const getChatSessionListApi = (
+  payload: any,
   callback: (res: any) => void = () => {}
 ) => {
-  fetchCall(API_CONSTANTS.GET_CHAT_SESSION, API_METHODS.GET, {}, callback);
+  fetchCall(API_CONSTANTS.GET_CHAT_SESSION, API_METHODS.POST, payload, callback);
 };
 
 export const getAIProfileListApi = (
@@ -31,5 +32,5 @@ export const getChatSessionDataApi = (
   params: string,
   callback: (res: any) => void = () => {}
 ) => {
-  fetchCall(`${API_CONSTANTS.GET_CHAT_SESSION}${params}`, API_METHODS.GET, {}, callback);
+  fetchCall(`${API_CONSTANTS.GET_CHAT_SESSION_DATA}${params}`, API_METHODS.GET, {}, callback);
 };
