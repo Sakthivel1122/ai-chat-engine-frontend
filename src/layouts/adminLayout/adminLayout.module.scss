@@ -1,0 +1,21 @@
+@import "../../styles/mixins.scss";
+@import "../../styles/variables.scss";
+
+.AdminLayout {
+  height: 100vh;
+  display: flex;
+
+  &_content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &_content_wrapper {
+    flex: 1;
+
+    @include light-mode {
+      background-color: white;
+    }
+  }
+}

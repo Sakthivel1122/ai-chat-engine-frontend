@@ -2,7 +2,7 @@
 
 import React from "react";
 import styles from "./logo.module.scss";
-import { RiRobot2Line, RiRobot2Fill } from "react-icons/ri";
+import { RiRobot2Line } from "react-icons/ri";
 import { useTheme } from "next-themes";
 
 interface LogoProps {

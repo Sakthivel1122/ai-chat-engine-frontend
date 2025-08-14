@@ -2,6 +2,11 @@ export const ROUTES = {
     HOME: "/",
     LOGIN: "/login",
     SIGNUP: "/signup",
+    ADMIN: {
+        DASHBOARD: "/admin",
+        AI_PROFILE: "/admin/ai-profile",
+        USER_MANAGEMENT: "/admin/user-management",
+    },
 }
 
 export const APP_DATA = {

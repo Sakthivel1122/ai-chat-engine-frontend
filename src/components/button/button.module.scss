@@ -26,3 +26,21 @@
     }
   }
 }
+
+.secondary_btn {
+  background-color: transparent;
+  border: 1px solid #ccc;
+  color: black;
+
+  &:hover {
+    background-color: rgba($color: $primary-color, $alpha: 0.1);
+  }
+
+  @include dark-mode {
+    border-color: grey;
+
+    &:hover {
+      background-color: $dark-primary-hover-color;
+    }
+  }
+}

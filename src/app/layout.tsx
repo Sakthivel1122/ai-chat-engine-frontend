@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/globals.scss";
 import "../styles/base.scss";
-import MainLayout from "@/layouts/mainLayout/mainLayout";
 import { ThemeProvider } from "next-themes";
 import { ClientProvider } from "@/components/clientProvider/clientProvider";
+import { ToastProvider } from "@/components/toastProvider/toastProvider";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -30,7 +30,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <ClientProvider>{children}</ClientProvider>
+          <ClientProvider>
+            {children}
+            <ToastProvider />
+          </ClientProvider>
         </ThemeProvider>
       </body>
     </html>

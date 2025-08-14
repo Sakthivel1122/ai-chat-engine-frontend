@@ -1,0 +1,74 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+
+.Table {
+  overflow-x: auto;
+  width: 100%;
+
+  &_table {
+    min-width: 100%;
+    border-collapse: collapse;
+    background-color: transparent;
+
+    @include dark-mode {
+      border: transparent;
+    }
+
+    &_head {
+      &_data {
+        padding: 1.6rem 1rem;
+        text-align: left;
+        font-weight: 600;
+        font-size: 1.6rem;
+        color: #374151;
+        @include para1;
+      }
+    }
+
+    &_body {
+      &_row {
+        border-top: 1px solid #e5e7eb;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: #f6f6f6;
+        }
+
+        background-color: transparent;
+
+        // &:nth-child(even) {
+        //   background-color: #fcfbfb;
+        // }
+
+        @include dark-mode {
+          background-color: $dark-bg-color;
+          border-top: 1px solid #374151;
+
+          // &:nth-child(even) {
+          //   background-color: #303030;
+          // }
+
+          &:hover {
+            background-color: $dark-primary-hover-color;
+          }
+        }
+
+        &_data {
+          padding: 1.4rem 1rem;
+          font-size: 1.6rem;
+          color: #374151;
+          @include para1;
+          line-height: 1 !important;
+        }
+      }
+
+      .noData {
+        text-align: center;
+        color: #9ca3af;
+        padding: 1rem;
+        font-size: 1.6rem;
+        @include para1;
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+@import "../../../styles/mixins.scss";
+@import "../../../styles/variables.scss";
+
+.AiProfile {
+  padding: 1.6rem 2rem;
+  
+  &_system_prompt_text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 7rem !important;
+  }
+
+  &_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  &_title {
+    @include para1;
+    font-size: 2rem !important;
+  }
+
+  &_create_btn {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  &_search_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  &_search_box {
+    width: 30rem;
+  }
+
+  &_actions {
+    display: flex;
+    gap: 1.3rem;
+
+    &_icon {
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+  }
+}

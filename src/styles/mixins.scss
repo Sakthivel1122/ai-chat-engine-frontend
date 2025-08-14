@@ -88,6 +88,31 @@
   }
 }
 
+@mixin popup-wrapper {
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin popup-content {
+  background-color: white;
+  padding: 1.6rem;
+  border-radius: 0.8rem;
+  position: relative;
+  
+  @include dark-mode {
+    background-color: $dark-bg-color;
+    box-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
+  }
+}
+
 @mixin respond-from($breakpoint) {
   @media (min-width: map-get($breakpoints, $breakpoint)) {
     @content;
@@ -96,6 +121,18 @@
 
 @mixin respond-to($breakpoint) {
   @media (max-width: map-get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+@mixin dark-mode {
+  :global(html.dark) & {
+    @content;
+  }
+}
+
+@mixin light-mode {
+  :global(html.light) & {
     @content;
   }
 }

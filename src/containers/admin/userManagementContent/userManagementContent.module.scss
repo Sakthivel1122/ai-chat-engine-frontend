@@ -1,0 +1,29 @@
+@import "../../../styles/mixins.scss";
+@import "../../../styles/variables.scss";
+
+.UserManagementContent {
+  padding: 1.6rem 2rem;
+  
+  &_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  &_title {
+    @include para1;
+    font-size: 2rem !important;
+  }
+
+  &_search_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  &_search_box {
+    width: 30rem;
+  }
+}

@@ -1,0 +1,46 @@
+@import "../../styles/mixins.scss";
+@import "../../styles/variables.scss";
+
+.AdminSideBarItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.3rem 1rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  color: black;
+  
+  @include dark-mode {
+    color: white;
+  }
+
+  &:hover {
+    background-color: $primary-hover-color;
+
+    :global(html.dark) & {
+      background-color: $dark-primary-hover-color;
+    }
+  }
+  &.active {
+    color: $primary-color;
+    background-color: $primary-hover-color;
+
+    :global(html.dark) & {
+      color: white;
+      background-color: $dark-primary-hover-color;
+    }
+  }
+
+  &_icon {
+    font-size: 1.8rem;
+  }
+
+  &_label {
+    @include para1;
+    font-size: 1.4rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

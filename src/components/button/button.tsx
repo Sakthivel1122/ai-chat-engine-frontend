@@ -24,14 +24,19 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={`${styles.button} ${className}`}
+      className={`${styles.button} ${
+        variant === "secondary" ? styles.secondary_btn : ""
+      } ${className}`}
       disabled={disabled}
       {...props}
     >
-      {isLoading
-        ? <Loader size={loaderSize}/>
-        : content ? <p>{content}</p> : children
-      }
+      {isLoading ? (
+        <Loader size={loaderSize} />
+      ) : content ? (
+        <p>{content}</p>
+      ) : (
+        children
+      )}
     </button>
   );
 };

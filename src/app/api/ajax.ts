@@ -52,7 +52,7 @@ export const fetchCall = async <T>(
     method,
     url,
     headers,
-    ...(method !== API_METHODS.GET && { data: payload }),
+    ...(method !== API_METHODS.GET ? { data: payload } : { params: payload }),
     isServerSide,
   };
 
@@ -72,9 +72,15 @@ export const fetchCall = async <T>(
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
+    const originalRequest = error.config as AxiosRequestConfig & {
+      _retry?: boolean;
+    };
 
-    console.log("originalRequest", originalRequest, originalRequest?.isServerSide);
+    console.log(
+      "originalRequest",
+      originalRequest,
+      originalRequest?.isServerSide
+    );
 
     // Handle 401: Try refresh token if not already retried
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -94,12 +100,15 @@ axiosInstance.interceptors.response.use(
         }
 
         console.log("refreshToken", refreshToken);
-        const refreshResponse: any = await axios.get(API_CONSTANTS.REFRESH_TOKEN, {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${refreshToken}`,
-          },
-        });
+        const refreshResponse: any = await axios.get(
+          API_CONSTANTS.REFRESH_TOKEN,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${refreshToken}`,
+            },
+          }
+        );
 
         console.log("refreshResponse", refreshResponse);
 
@@ -130,8 +139,7 @@ axiosInstance.interceptors.response.use(
               originalRequest.headers = {
                 ...originalRequest.headers,
                 Authorization: `Bearer ${newAccessToken}`,
-              }
-  
+              };
               return axiosInstance(originalRequest);
             }
           } else {
@@ -141,8 +149,10 @@ axiosInstance.interceptors.response.use(
           handleLogout(ROUTES.LOGIN);
         }
       } catch (refreshError: any) {
+        if (refreshError?.status === 401) {
+          handleLogout(ROUTES.LOGIN);
+        }
         // If refresh also fails, log out
-        handleLogout(ROUTES.LOGIN);
         return Promise.reject(refreshError);
       }
     }
@@ -154,7 +164,7 @@ axiosInstance.interceptors.response.use(
     }
 
     // Any other error: logout
-    handleLogout(ROUTES.LOGIN);
+    // handleLogout(ROUTES.LOGIN);
     return Promise.reject(error);
   }
 );

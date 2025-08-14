@@ -42,7 +42,11 @@ const SignUpPage = () => {
         });
 
         if (result?.ok) {
-          router.push(ROUTES.HOME);
+          if (userData?.role === "admin") {
+            router.push(ROUTES.ADMIN.DASHBOARD);
+          } else {
+            router.push(ROUTES.HOME);
+          }
         }
       } else {
       }
@@ -73,7 +77,11 @@ const SignUpPage = () => {
           console.log(result);
 
           if (result?.ok) {
-            router.push(ROUTES.HOME);
+            if (userData?.role === "admin") {
+              router.push(ROUTES.ADMIN.DASHBOARD);
+            } else {
+              router.push(ROUTES.HOME);
+            }
           }
 
           // const session = await getSession();

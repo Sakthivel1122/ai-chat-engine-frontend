@@ -1,0 +1,47 @@
+@import "../../styles/mixins.scss";
+@import "../../styles/variables.scss";
+
+.ConfirmPopup {
+  @include popup-wrapper;
+  &_content {
+    @include popup-content;
+    min-width: 24rem;
+    padding: 2rem;
+    position: relative;
+  }
+
+  &_title {
+    @include para1;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  &_btn_wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+  }
+
+  &_close_btn_wrapper {
+    @include flex-center;
+    position: absolute;
+    top: -1.2rem;
+    right: -1.2rem;
+    padding: 0.4rem;
+    border-radius: 50%;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    background-color: white;
+
+    @include dark-mode {
+      background-color: $dark-bg-color;
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  &_close_btn_icon {
+    font-size: 1.8rem;
+  }
+}

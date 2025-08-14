@@ -1,0 +1,14 @@
+.AdminLayout {
+  height: 100vh;
+  display: flex;
+
+  &_content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &_content_wrapper {
+    flex: 1;
+  }
+}

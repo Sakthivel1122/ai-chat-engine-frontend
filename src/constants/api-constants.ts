@@ -11,6 +11,9 @@ export const API_CONSTANTS = {
   AI_PROFILE: `${BaseUrl}/ai-engine/api/v1/user/ai-profile`,
   SEND_MESSAGE: `${BaseUrl}/ai-engine/api/v1/user/send-message`,
   CHAT_HISTORY: `${BaseUrl}/ai-engine/api/v1/user/chat-history`,
+  ADMIN_DASHBOARD: `${BaseUrl}/admin-services/api/v1/dashboard`,
+  ADMIN_MESSAGES_CHART_LIST: `${BaseUrl}/admin-services/api/v1/messages-exchanged-per-day`,
+  ADMIN_GET_ALL_USER_LIST: `${BaseUrl}/admin-services/api/v1/user`,
 }
 
 export const API_METHODS = {

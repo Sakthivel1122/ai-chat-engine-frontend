@@ -1,0 +1,92 @@
+@import "../../styles/mixins.scss";
+@import "../../styles/variables.scss";
+
+.chartWrapper {
+  width: 100%;
+  background-color: $light-bg-color;
+  display: flex;
+  flex-direction: column;
+
+  border: 1px solid #0000001a;
+  border-radius: 0.8rem;
+
+  @include dark-mode {
+    background-color: #303030;
+  }
+
+  & :focus {
+    outline: none;
+  }
+}
+
+.tooltip {
+  background: white;
+  border: 1px solid #e5e7eb;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  @include dark-mode {
+    background: #1e293b;
+    border: 1px solid #334155;
+  }
+}
+
+.label {
+  font-weight: 600;
+  color: #9249e7;
+  margin-bottom: 0.5rem;
+  @include para1;
+  font-size: 1.4rem;
+
+  @include dark-mode {
+    color: #c084fc;
+  }
+}
+
+.value {
+  color: #0f172a;
+  font-size: 14px;
+  @include para1;
+  font-size: 1.4rem;
+
+  @include dark-mode {
+    color: #e2e8f0;
+  }
+}
+
+.axisTick {
+  @include para1;
+  font-size: 1.4rem;
+}
+
+.chartTitle {
+  @include para1;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  margin-left: 1rem;
+  padding-top: 1.2rem;
+
+  @include dark-mode {
+    color: #e2e8f0;
+  }
+}
+
+.axisLabel {
+  @include para1;
+  @include dark-mode {
+    fill: #e2e8f0;
+  }
+}
+
+.chart_container {
+  min-height: 30rem;
+  flex: 1;
+}
+
+.LineChart {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
