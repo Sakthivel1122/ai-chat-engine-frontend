@@ -45,19 +45,20 @@ function Table<T extends object>({
               className={styles.Table_table_body_row}
               onClick={() => onRowClick?.(row)}
             >
-              {columns.map((col) => (
-                <td
+              {columns.map((col) => {
+                const cellValue = row[col.key as keyof T];
+                return <td
                   key={String(col.key)}
                   className={`${styles.Table_table_body_row_data} ${col?.customClass}`}
-                  title={col?.showTitle ? row[col.key as keyof T] : ""}
+                  title={col?.showTitle && typeof cellValue === "string" ? cellValue : ""}
                 >
                   {col.render
                     ? col.render(row)
                     : col.key in row
-                    ? (row[col.key as keyof T] as React.ReactNode)
+                    ? (cellValue as React.ReactNode)
                     : null}
                 </td>
-              ))}
+              })}
             </tr>
           ))}
           {data.length === 0 && (
