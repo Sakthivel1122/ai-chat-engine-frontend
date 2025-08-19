@@ -1,6 +1,6 @@
 // lib/api/ajax.ts
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { API_CONSTANTS, API_METHODS } from "@/constants/api-constants";
 import { getSession, signIn, signOut } from "next-auth/react";
