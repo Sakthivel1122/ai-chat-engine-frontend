@@ -17,6 +17,13 @@
     display: flex;
     flex-direction: column;
   }
+
+  &_loader_wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+  }
 }
 
 @include respond-to("lg") {

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import styles from "./chatSession.module.scss";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
@@ -14,6 +14,8 @@ interface ChatSessionProps {
   promptText: string;
   setPromptText: (promptText: string) => void;
   sendBtnIsLoading?: boolean;
+  loadingMessage: string;
+  scrollRef: any;
 }
 
 const ChatSession: React.FC<ChatSessionProps> = ({
@@ -24,6 +26,8 @@ const ChatSession: React.FC<ChatSessionProps> = ({
   setPromptText,
   handleSendBtnClick,
   sendBtnIsLoading,
+  loadingMessage,
+  scrollRef,
 }) => {
   const handleBottomInputOncChange = (e: any) => {
     setPromptText(e);
@@ -37,7 +41,7 @@ const ChatSession: React.FC<ChatSessionProps> = ({
 
   useEffect(() => {}, []);
 
-  const isNewChat = !(chatList && chatList?.length > 0);
+  const isNewChat = !((chatList && chatList?.length > 0) || loadingMessage);
 
   return (
     <div
@@ -47,8 +51,12 @@ const ChatSession: React.FC<ChatSessionProps> = ({
           : ""
       }`}
     >
-      {chatList && chatList?.length > 0 ? (
-        <ChatFlow chatList={chatList} />
+      {((chatList && chatList?.length > 0) || loadingMessage) ? (
+        <ChatFlow 
+          chatList={chatList} 
+          loadingMessage={loadingMessage}
+          scrollRef={scrollRef}
+        />
       ) : (
         <div className={styles.ChatSession_chat_details_wrapper}>
           <p className={styles.ChatSession_chat_details_title}>
@@ -69,7 +77,7 @@ const ChatSession: React.FC<ChatSessionProps> = ({
             onChange={handleBottomInputOncChange}
             placeholder="Enter prompt here..."
             onSubmit={() => {
-              if (promptText) {
+              if (promptText && !sendBtnIsLoading) {
                 handleSendBtnClick(promptText);
               }
             }}
@@ -77,11 +85,11 @@ const ChatSession: React.FC<ChatSessionProps> = ({
           <Button
             className={styles.ChatSession_send_btn}
             onClick={() => {
-              if (promptText) {
+              if (promptText && !sendBtnIsLoading) {
                 handleSendBtnClick(promptText);
               }
             }}
-            disabled={!sendBtnIsLoading ? (promptText ? false : true) : false}
+            disabled={!sendBtnIsLoading ? (promptText ? false : true) : true}
             isLoading={sendBtnIsLoading}
             loaderSize={14}
           >

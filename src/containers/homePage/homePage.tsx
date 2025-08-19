@@ -44,9 +44,11 @@ const HomePage: React.FC<HomePageProps> = () => {
   const [chatSessionScrollLoader, setChatSessionScrollLoader] = useState<boolean>(false);
   const [innerWidth, setInnerWidth] = useState<number>();
   const [showSideBar, setShowSideBar] = useState<boolean>(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
 
   const chatSessionTotalPageRef = useRef(0);
   const chatSessionCurrectPageRef = useRef(1);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const handleClick = () => {
     dispatch(setUserName(`user ${count}`));
@@ -89,6 +91,8 @@ const HomePage: React.FC<HomePageProps> = () => {
 
   const handleSendBtnClick = async (promptText: string) => {
     setSendBtnIsLoading(true);
+    setLoadingMessage(promptText);
+    setPromptText("");
 
     let payload: any = {
       message: promptText,
@@ -103,9 +107,11 @@ const HomePage: React.FC<HomePageProps> = () => {
     payload.chat_type = "stream";
 
     let once = true;
+    let chunkCount = 0;
 
     try {
       await streamChatWithFetch(payload, (chunk) => {
+        chunkCount++;
         setStreamedText((prev) => prev + chunk);
 
         let tempArr = chatList;
@@ -121,8 +127,19 @@ const HomePage: React.FC<HomePageProps> = () => {
         let newMsg = tempArr[len].message + chunk;
         tempArr[len].message = newMsg;
         setChatList(tempArr);
+        if (chunkCount === 5) {
+          const el = scrollRef.current;
+          if (el) {
+            const currentScroll = el.scrollTop;
+            el.scrollTo({
+              top: currentScroll + 50,
+              behavior: "smooth",
+            });
+          }
+        }
       }, (meta) => {
-        setSendBtnIsLoading(false);
+        // setSendBtnIsLoading(false);
+        setLoadingMessage("");
         setPromptText("");
         const sessionId = meta?.chat_session_id;
 
@@ -150,7 +167,9 @@ const HomePage: React.FC<HomePageProps> = () => {
         }
       }).catch((error) => {
         setSendBtnIsLoading(false);
+        setLoadingMessage("");
       })
+      setSendBtnIsLoading(false);
     } catch (err) {
       console.error("Streaming failed:", err);
     }
@@ -218,6 +237,22 @@ const HomePage: React.FC<HomePageProps> = () => {
       setShowSideBar(false);
     }
   }
+
+  const scrollToBottom = () => {
+    const el = scrollRef.current;
+    if (el) {
+      el.scrollTo({
+        top: el.scrollHeight,
+        behavior: "smooth", // <-- smooth scroll
+      });
+    }
+  }
+
+  useEffect(() => {
+    if (loadingMessage) {
+      scrollToBottom();
+    }
+  } ,[loadingMessage]);
 
   useEffect(() => {
     getAIProfileListApi((res) => {
@@ -300,6 +335,8 @@ const HomePage: React.FC<HomePageProps> = () => {
           promptText={promptText}
           setPromptText={setPromptText}
           sendBtnIsLoading={sendBtnIsLoading}
+          loadingMessage={loadingMessage}
+          scrollRef={scrollRef}
         />
       </div>
     </div>
